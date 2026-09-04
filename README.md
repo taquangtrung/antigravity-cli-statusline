@@ -8,6 +8,8 @@ A two-row statusline for the Antigravity CLI (`agy`) that displays active model 
 
 ![Antigravity CLI statusline in auto mode](assets/agy-cli-auto-mode.png)
 
+![Antigravity CLI statusline in plan mode](assets/agy-cli-plan-mode.png)
+
 - **Primary row**:
   + **Model**: Active model display name (e.g., `Gemini 3.8 Flash (High)`).
   + **5-hour quota**: Used percentage and next reset time (`HH:MM`).
