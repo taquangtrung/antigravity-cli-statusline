@@ -3,10 +3,10 @@
 // Antigravity CLI status line. Reads the status-line JSON payload on stdin and
 // prints, e.g.:
 //
-//   Gemini 3.5 Flash (High) | 5% 01:50 | 74% Tue 04:00 | 17% ctx (1M) | ? help
+//   Gemini 3.5 Flash (High) | 5% 01:50 | 74% Tue 04:00 | 17% ctx (170k/1M) | ? help
 //   ⏵⏵ interactive mode on (shift+tab to cycle) | ~/Workspace/project
 //
-// Primary row:   model | <5h quota> | <weekly quota> | <context>% ctx | ? help
+// Primary row:   model | <5h quota> | <weekly quota> | <context>% ctx (<used>/<total>) | ? help
 // Secondary row: ⏵⏵ <mode> (shift+tab to cycle) | <cwd>
 //
 // Quota buckets show used_percentage and reset time: 5-hour quota (HH:MM reset
@@ -65,11 +65,18 @@ function buildRow1(data) {
   const contextWindow = data.context_window ?? {};
   const ctxPct = Math.round(contextWindow.used_percentage ?? 0);
   const ctxSize = contextWindow.context_window_size ?? 0;
+  const ctxUsed =
+    contextWindow.total_input_tokens ??
+    Math.round(((contextWindow.used_percentage ?? 0) / 100) * ctxSize);
 
   const segments = [];
   if (model) segments.push(model);
   segments.push(...buildQuotaSegments(data.quota ?? {}));
-  segments.push(ctxSize > 0 ? `${ctxPct}% ctx (${humanTokens(ctxSize)})` : `${ctxPct}% ctx`);
+  if (ctxSize > 0) {
+    segments.push(`${ctxPct}% ctx (${humanTokens(ctxUsed)}/${humanTokens(ctxSize)})`);
+  } else {
+    segments.push(`${ctxPct}% ctx`);
+  }
   segments.push('? help');
 
   return `${COLOR}${segments.join(' | ')}${RESET}`;
@@ -120,3 +127,4 @@ function main() {
 }
 
 main();
+
