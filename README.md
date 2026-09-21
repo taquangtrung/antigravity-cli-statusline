@@ -87,11 +87,13 @@ If you prefer manual setup:
    {
      "statusLine": {
        "type": "command",
-       "command": "node -e \"require(require('path').join(require('os').homedir(), '.gemini', 'antigravity-cli', 'statusline.js'))\"",
+       "command": "node -e /*'*/require(require(`os`).homedir()+`/.gemini/antigravity-cli/statusline.js`)//'",
        "enabled": true
      }
    }
    ```
+
+   The odd-looking command avoids single-quoted string literals wrapped in double quotes, which some shells mis-tokenize, by using template-literal backticks and a comment-hidden quote instead; it is verified to run correctly under `bash`, `cmd.exe`, and PowerShell.
 
 ## How it works
 

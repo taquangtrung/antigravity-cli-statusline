@@ -52,7 +52,7 @@ function updateSettings(targetDir) {
 
   settings.statusLine = {
     type: 'command',
-    command: 'node -e "require(require(\'path\').join(require(\'os\').homedir(), \'.gemini\', \'antigravity-cli\', \'statusline.js\'))"',
+    command: "node -e /*'*/require(require(`os`).homedir()+`/.gemini/antigravity-cli/statusline.js`)//'",
     enabled: true,
   };
 
